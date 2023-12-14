@@ -1,4 +1,4 @@
-#
+
 provider "aws" {
   region = "tu_region_aws"
 }
