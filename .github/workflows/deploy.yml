@@ -21,9 +21,28 @@ jobs:
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
           docker buildx create --use
           docker buildx build --push -t mmurcia57/grafana-app:latest -f terraform/Dockerfile terraform
-      
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.14.7
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        working-directory: ./terraform
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        working-directory: ./terraform
 
       - name: Deploy to AWS ECS
         run: |
-          # Configura AWS CLI aquí
-          ecs-cli compose --project-name grafana-app service up
+          # Puedes agregar comandos adicionales para configurar o validar tu despliegue en ECS
+          echo "Despliegue en AWS ECS completado"
