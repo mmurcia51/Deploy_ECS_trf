@@ -16,7 +16,7 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          driver-opts: name=builder0
+          driver-opts: name=default
 
       - name: Build and push Docker image
         run: |
