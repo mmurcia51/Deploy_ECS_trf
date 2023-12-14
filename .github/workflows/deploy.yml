@@ -22,7 +22,7 @@ jobs:
           docker buildx create --use
           docker buildx build -t mmurcia57/grafana-app -f terraform/Dockerfile terraform
           docker tag mmurcia57/grafana-app mmurcia57/grafana-app:latest
-          docker push mmurcia57/grafana-app:latest
+          docker --push mmurcia57/grafana-app:latest
 
       - name: Deploy to AWS ECS
         run: |
