@@ -1,3 +1,4 @@
+#
 # Usa la imagen oficial de Grafana como base
 FROM grafana/grafana:latest
 
