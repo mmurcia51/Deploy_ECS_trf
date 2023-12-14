@@ -20,9 +20,8 @@ jobs:
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
           docker buildx create --use
-          docker buildx build -t mmurcia57/grafana-app -f terraform/Dockerfile terraform
-          docker tag mmurcia57/grafana-app mmurcia57/grafana-app:latest
-          docker --push mmurcia57/grafana-app:latest
+          docker buildx build --push -t mmurcia57/grafana-app:latest -f terraform/Dockerfile terraform
+      
 
       - name: Deploy to AWS ECS
         run: |
