@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "tu_region_aws"
+  region = "us-east-1"
 }
 
 resource "aws_ecs_cluster" "grafana_cluster" {
@@ -8,15 +8,16 @@ resource "aws_ecs_cluster" "grafana_cluster" {
 
 resource "aws_ecs_task_definition" "grafana_task" {
   family                   = "grafana-task-family"
-  network_mode             = "awsvpc"  # O el modo de red que desees
-  requires_compatibilities = ["FARGATE"]  # O ["EC2"] dependiendo de tus necesidades
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
 
-  execution_role_arn = module.ecs.execution_role_arn
+  // Asegúrate de proporcionar el ARN del rol de ejecución directamente si no estás utilizando un módulo
+  execution_role_arn = "arn:aws:iam::123456789012:role/your_execution_role"
 
   container_definitions = jsonencode([
     {
       name  = "grafana-container"
-      image = "mmurcia57/grafana-app:latest"  # Ajusta la imagen según tu necesidad
+      image = "mmurcia57/grafana-app:latest"
       portMappings = [
         {
           containerPort = 3000
@@ -24,21 +25,18 @@ resource "aws_ecs_task_definition" "grafana_task" {
         }
       ]
     }
-    // Puedes agregar más definiciones de contenedores si es necesario
   ])
 }
-
 
 resource "aws_ecs_service" "grafana_service" {
   name            = "grafana-service"
   cluster         = aws_ecs_cluster.grafana_cluster.id
   task_definition = aws_ecs_task_definition.grafana_task.arn
-  launch_type     = "FARGATE"  # O "EC2" dependiendo de tus necesidades
+  launch_type     = "FARGATE"
 
   network_configuration {
-    subnets = module.ecs.subnets
-    security_groups = module.ecs.security_groups
+    // Asegúrate de proporcionar las subnets y security groups directamente si no estás utilizando un módulo
+    subnets        = ["subnet-12345678", "subnet-87654321"]
+    security_groups = ["sg-0123456789abcdef0"]
   }
-
-  // Puedes agregar más configuraciones según tus necesidades
 }
