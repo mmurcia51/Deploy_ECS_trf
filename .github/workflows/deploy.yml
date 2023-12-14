@@ -39,8 +39,9 @@ jobs:
         working-directory: ./terraform
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan || (echo "Error during apply, executing terraform destroy" && terraform destroy -auto-approve && exit 1)
-  
+        run: terraform apply -auto-approve tfplan  || (echo "Error during apply, executing terraform destroy" && terraform destroy -auto-approve && exit 1)
+        working-directory: ./terraform  # Añadir esta línea para especificar el directorio de trabajo
+
       - name: Deploy to AWS ECS
         run: |
           # Puedes agregar comandos adicionales para configurar o validar tu despliegue en ECS
