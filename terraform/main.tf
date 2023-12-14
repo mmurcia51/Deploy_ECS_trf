@@ -28,9 +28,6 @@ resource "aws_ecs_task_definition" "grafana_task" {
   ])
 }
 
-module "ecs" {
-  source = "./ecs"  # Ajusta la ruta al directorio o módulo de ECS
-}
 
 resource "aws_ecs_service" "grafana_service" {
   name            = "grafana-service"
